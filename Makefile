@@ -30,7 +30,7 @@ pinentry:
 
 pinentry-dmenu: pinentry pinentry-dmenu.o drw.o util.o
 	@echo CC -o $@
-	@${CC} -o $@ ${OBJ} ${OBJ_PIN} ${LDFLAGS} -lassuan -lgpgme -lgpg-error -lconfig
+	@${CC} -o $@ ${OBJ} ${OBJ_PIN} ${LDFLAGS} -lassuan -lgpgme -lgpg-error
 
 clean:
 	@echo cleaning

@@ -19,64 +19,6 @@ to
 .B pinentry-dmenu
 to use the program as the regular dialog for
 .BR gpg-agent .
-.PP
-The configuration is placed in
-.IR ~/.gnupg/pinentry-dmenu.conf .
-You can change the path to the config file with the environment variable
-.IR GNUPGHOME .
-
-
-.SH OPTIONS
-.TP
-.BI "asterisk =" " *"
-Defines the symbol which is showed for each typed character.
-.TP
-.BI "bottom =" " false"
-pinentry-dmenu appears at the bottom of the screen.
-.TP
-.BI "min_password_length =" " 32"
-The minimal space of the password field. This value has affect to the description field after the password field.
-.TP
-.BI "monitor =" " -1"
-pinentry-dmenu is displayed on the monitor number supplied. Monitor numbers are starting from 0.
-.TP
-.BI "prompt =" " """"
-Defines the prompt to be displayed to the left of the input field.
-.TP
-.BI "font =" " monospace:size=10"
-Defines the font or font set used.
-.TP
-.BI "prompt_bg =" " #bbbbbb"
-Defines the prompt background color.
-.IR #RGB ,
-.I #RRGGBB
-and X color names are supported.
-.TP
-.BI "prompt_fg =" " #222222"
-Defines the prompt foreground color.
-.TP
-.BI "normal_bg =" " #bbbbbb"
-Defines the normal background color.
-.TP
-.BI "normal_fg =" " #222222"
-Defines the normal foreground color.
-.TP
-.BI "select_bg =" " #eeeeee"
-Defines the selected background color.
-.TP
-.BI "select_fg =" " #005577"
-Defines the selected foreground color.
-.TP
-.BI "desc_bg =" " #bbbbbb"
-Defines the description background color.
-.TP
-.BI "desc_fg =" " #222222"
-Defines the description foreground color.
-.TP
-.BI "embedded =" " false"
-Embed into window.
-
-
 .SH USAGE
 pinentry-dmenu is completely controlled by the keyboard.
 .TP
@@ -184,25 +126,6 @@ Delete line left
 Paste from primary X selection
 
 
-.SH EXAMPLES
-.sp
-.if n \{
-.RS 4
-.\}
-.nf
-asterisk= "# ";
-prompt = "$";
-font = "Noto Sans UI:size=13";
-prompt_fg = "#eeeeee";
-prompt_bg = "#d9904a";
-normal_fg = "#ffffff";
-normal_bg = "#000000";
-select_fg = "#eeeeee";
-select_bg = "#d9904a";
-desc_fg = "#eeeeee";
-desc_bg = "#d9904a";
-
-
 .SH AUTHORS
 .B pinentry-dmenu
 is a fork of
@@ -213,11 +136,6 @@ and uses the api of
 , a GnuPG tool.
 .B pinentry-dmenu
 itself was written by Moritz Lüdecke <ritze@skweez.net>.
-
-
-.SH REPORTING BUGS
-Report pinentry-dmenu bugs to <BUGREPORT>
-
 
 .SH SEE ALSO
 .BR dmenu (1),

@@ -1,6 +1,5 @@
 /* See LICENSE file for copyright and license details. */
 #include <ctype.h>
-#include <libconfig.h>
 #include <locale.h>
 #include <signal.h>
 #include <stdio.h>
@@ -25,8 +24,6 @@
 #include "pinentry/pinentry.h"
 #include "pinentry/memory.h"
 
-#define CONFIG_DIR "/.gnupg"
-#define CONFIG_FILE "/pinentry-dmenu.conf"
 #define INTERSECT(x, y, w, h, r) \
 		(MAX(0, MIN((x)+(w),(r).x_org+(r).width) - MAX((x),(r).x_org)) \
 		 && MAX(0, MIN((y)+(h),(r).y_org+(r).height) - MAX((y),(r).y_org)))
@@ -701,92 +698,6 @@ pinentry_cmd_handler_t pinentry_cmd_handler = cmdhandler;
 
 int
 main(int argc, char *argv[]) {
-	Bool bval;
-	int i, val;
-	const char *str;
-	struct passwd *pw;
-	char path[PATH_MAX];
-	char *sudo_uid = getenv("SUDO_UID");
-	char *home = getenv("HOME");
-	char *gnupghome = getenv("GNUPGHOME");
-	config_t cfg;
-
-	if (gnupghome) {
-		i = strlen(gnupghome);
-		strcpy(path, gnupghome);
-	} else {
-		/* Get the home dir even if the user used sudo or logged in as root */
-		if (sudo_uid) {
-			i = atoi(sudo_uid);
-			pw = getpwuid(i);
-			home = pw->pw_dir;
-		}
-
-		i = strlen(home);
-		strcpy(path, home);
-		strcpy(&path[i], CONFIG_DIR);
-		i += strlen(CONFIG_DIR);
-	}
-
-	strcpy(&path[i], CONFIG_FILE);
-	endpwent();
-
-	config_init(&cfg);
-
-	/* Read the file. If there is an error, report it and exit. */
-	if (config_read_file(&cfg, path)) {
-		if (config_lookup_string(&cfg, "asterisk", &str)) {
-			asterisk = str;
-		}
-		if (config_lookup_bool(&cfg, "bottom", &bval)) {
-			bottom = bval;
-		}
-		if (config_lookup_int(&cfg, "min_password_length", &val)) {
-			minpwlen = val;
-		}
-		if (config_lookup_int(&cfg, "monitor", &val)) {
-			mon = val;
-		}
-		if (config_lookup_string(&cfg, "prompt", &str)) {
-			prompt = str;
-		}
-		if (config_lookup_string(&cfg, "font", &str)) {
-			fonts[0] = str;
-		}
-		if (config_lookup_string(&cfg, "prompt_bg", &str)) {
-			colors[SchemePrompt][ColBg] = str;
-		}
-		if (config_lookup_string(&cfg, "prompt_fg", &str)) {
-			colors[SchemePrompt][ColFg] = str;
-		}
-		if (config_lookup_string(&cfg, "normal_bg", &str)) {
-			colors[SchemeNormal][ColBg] = str;
-		}
-		if (config_lookup_string(&cfg, "normal_fg", &str)) {
-			colors[SchemeNormal][ColFg] = str;
-		}
-		if (config_lookup_string(&cfg, "select_bg", &str)) {
-			colors[SchemeSelect][ColBg] = str;
-		}
-		if (config_lookup_string(&cfg, "select_fg", &str)) {
-			colors[SchemeSelect][ColFg] = str;
-		}
-		if (config_lookup_string(&cfg, "desc_bg", &str)) {
-			colors[SchemeDesc][ColBg] = str;
-		}
-		if (config_lookup_string(&cfg, "desc_fg", &str)) {
-			colors[SchemeDesc][ColFg] = str;
-		}
-		if (config_lookup_bool(&cfg, "embedded", &bval)) {
-			embedded = bval;
-		}
-	} else if ((str = config_error_file(&cfg))) {
-		fprintf(stderr, "%s:%d: %s\n", config_error_file(&cfg),
-		        config_error_line(&cfg), config_error_text(&cfg));
-		return(EXIT_FAILURE);
-	} else {
-		printf("No config file found. Use defaults.\n");
-	}
 
 	pinentry_init("pinentry-dmenu");
 	pinentry_parse_opts(argc, argv);
@@ -794,8 +705,6 @@ main(int argc, char *argv[]) {
 	if (pinentry_loop()) {
 		return 1;
 	}
-
-	config_destroy(&cfg);
 
 	return 0;
 }
